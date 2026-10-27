@@ -1,0 +1,38 @@
+/* O Affix ocupa a largura toda; só o cartão recebe cliques. */
+.affix {
+  pointer-events: none;
+}
+
+.area {
+  display: flex;
+  justify-content: center;
+  padding: 0 16px calc(16px + env(safe-area-inset-bottom));
+
+  @media (min-width: $mantine-breakpoint-sm) {
+    justify-content: flex-end;
+    padding: 0 24px 24px;
+  }
+}
+
+.aviso {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  background: var(--app-surface);
+  pointer-events: auto;
+}
+
+.fechar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.marca {
+  flex: none;
+  display: block;
+}
+
+.iconeTexto {
+  vertical-align: -3px;
+}

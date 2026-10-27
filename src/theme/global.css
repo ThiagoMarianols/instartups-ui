@@ -1,0 +1,65 @@
+/* Contraste do texto — igual ao theme.ts do canvas */
+:root[data-mantine-color-scheme="light"] {
+  --mantine-color-text: var(--mantine-color-gray-9);
+  --mantine-color-dimmed: var(--mantine-color-gray-7);
+  --app-page: var(--mantine-color-gray-0);
+  --app-surface: var(--mantine-color-white);
+  --app-soft: var(--mantine-color-gray-1);
+  --app-media: var(--mantine-color-gray-2);
+  --app-media-icon: var(--mantine-color-gray-6);
+  --app-input-border: var(--mantine-color-gray-4);
+  --app-badge-text: var(--mantine-color-gray-8);
+  --app-avatar: var(--mantine-color-gray-2);
+  --app-avatar-text: var(--mantine-color-gray-8);
+  --app-avatar-alt: var(--mantine-color-gray-8);
+  --app-avatar-alt-text: var(--mantine-color-white);
+  --app-err: var(--mantine-color-red-8);
+  --app-err-bg: var(--mantine-color-red-0);
+  --app-err-text: var(--mantine-color-red-9);
+  --app-ok: var(--mantine-color-green-9);
+  --app-ok-bg: var(--mantine-color-green-0);
+  --app-heart: var(--mantine-color-red-8);
+  --app-disabled-card: var(--mantine-color-gray-0);
+}
+
+:root[data-mantine-color-scheme="dark"] {
+  --mantine-color-text: var(--mantine-color-gray-1);
+  --mantine-color-dimmed: var(--mantine-color-dark-1);
+  --app-page: var(--mantine-color-dark-8);
+  --app-surface: var(--mantine-color-dark-7);
+  --app-soft: var(--mantine-color-dark-6);
+  --app-media: var(--mantine-color-dark-6);
+  --app-media-icon: var(--mantine-color-dark-2);
+  --app-input-border: var(--mantine-color-dark-4);
+  --app-badge-text: var(--mantine-color-dark-0);
+  --app-avatar: var(--mantine-color-dark-5);
+  --app-avatar-text: var(--mantine-color-gray-2);
+  --app-avatar-alt: var(--mantine-color-dark-0);
+  --app-avatar-alt-text: var(--mantine-color-dark-9);
+  --app-err: var(--mantine-color-red-4);
+  --app-err-bg: rgba(250, 82, 82, 0.12);
+  --app-err-text: var(--mantine-color-red-4);
+  --app-ok: var(--mantine-color-green-4);
+  --app-ok-bg: rgba(64, 192, 87, 0.14);
+  --app-heart: var(--mantine-color-red-4);
+  --app-disabled-card: var(--mantine-color-dark-8);
+}
+
+html,
+body {
+  background-color: var(--app-page);
+}
+
+body {
+  margin: 0;
+}
+
+/* Rótulo acessível visualmente oculto */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -1,0 +1,30 @@
+# Dependências e saídas de build (refeitas dentro da imagem)
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Fora do build da imagem
+e2e/
+test-results/
+playwright-report/
+infra/
+.git/
+.github/
+.gitignore
+.idea/
+.vscode/
+*.md
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Segredos e configs locais
+.env
+.env.*
+*.pem

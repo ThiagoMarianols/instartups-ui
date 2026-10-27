@@ -1,0 +1,226 @@
+/* Modal de recorte */
+.modalCabecalho {
+  padding: 18px 24px;
+  align-items: flex-start;
+}
+
+.areaRecorte {
+  position: relative;
+  height: 360px;
+  background: var(--mantine-color-dark-9);
+  overflow: hidden;
+}
+
+/* Capa */
+.capa {
+  position: relative;
+  aspect-ratio: 4 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--app-media);
+}
+
+.capaImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  &[data-enviando] {
+    opacity: 0.45;
+  }
+}
+
+.acoesCapa {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+.acaoEscura {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: rgba(20, 20, 20, 0.75);
+  color: #ffffff;
+
+  &:hover {
+    background: rgba(20, 20, 20, 0.9);
+  }
+}
+
+.capaVazia {
+  aspect-ratio: 4 / 1;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px dashed var(--app-input-border);
+  border-radius: 8px;
+  background: var(--app-media);
+  color: var(--mantine-color-dimmed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px 0 140px;
+
+  & :global(.mantine-Dropzone-inner) {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding: 0 12px 0 112px;
+  }
+}
+
+.capaTexto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+}
+
+.capaErro {
+  aspect-ratio: 4 / 1;
+  box-sizing: border-box;
+  border: 1.5px dashed var(--app-err);
+  border-radius: 8px;
+  background: var(--app-err-bg);
+  color: var(--app-err-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  text-align: center;
+}
+
+.progressoCaixa {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: light-dark(rgba(255, 255, 255, 0.95), rgba(36, 36, 36, 0.95));
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progressoTopo {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Foto */
+.fotoLinha {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: -40px;
+  padding-left: 20px;
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+
+  & > * {
+    pointer-events: auto;
+  }
+}
+
+.fotoCaixa {
+  position: relative;
+  flex: none;
+  width: 88px;
+  height: 88px;
+}
+
+.foto {
+  position: relative;
+  display: block;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 4px solid var(--app-surface);
+  background: var(--app-media);
+
+  & img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &[data-enviando] {
+    border-color: var(--mantine-primary-color-filled);
+
+    & img {
+      opacity: 0.45;
+    }
+  }
+}
+
+.fotoPct {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.fotoBotao {
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  border: 2px solid var(--app-surface);
+}
+
+.fotoVazia,
+.fotoErro {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 4px var(--app-surface);
+}
+
+.fotoVazia {
+  border: 1.5px dashed var(--app-input-border);
+  background: var(--app-surface);
+  color: var(--mantine-color-dimmed);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.fotoErro {
+  border: 2px solid var(--app-err);
+  background: var(--app-err-bg);
+  color: var(--app-err);
+}
+
+.fotoInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 6px;
+  min-width: 0;
+}

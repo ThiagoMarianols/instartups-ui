@@ -1,0 +1,116 @@
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moldura {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid var(--app-input-border);
+  background: var(--app-soft);
+  isolation: isolate;
+
+  &[data-erro] {
+    border-color: var(--app-err);
+  }
+}
+
+.leaflet {
+  width: 100%;
+  background: var(--app-soft);
+  font-family: inherit;
+}
+
+/* Tiles do OpenStreetMap escurecidos no tema escuro */
+:global([data-mantine-color-scheme="dark"]) .tiles {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.85) saturate(0.6);
+}
+
+.pinWrapper {
+  background: none;
+  border: 0;
+}
+
+.pin {
+  display: block;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+
+  & path {
+    fill: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-1));
+    stroke: light-dark(var(--mantine-color-white), var(--mantine-color-dark-9));
+  }
+
+  & circle {
+    fill: light-dark(var(--mantine-color-white), var(--mantine-color-dark-9));
+  }
+}
+
+.raio {
+  stroke: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-1));
+  fill: light-dark(rgba(20, 20, 20, 0.06), rgba(241, 243, 245, 0.06));
+  fill-opacity: 1;
+}
+
+.precisao {
+  stroke: light-dark(rgba(20, 20, 20, 0.35), rgba(241, 243, 245, 0.45));
+  fill: light-dark(rgba(20, 20, 20, 0.08), rgba(241, 243, 245, 0.1));
+  fill-opacity: 1;
+}
+
+.aviso {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 80%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: light-dark(rgba(255, 255, 255, 0.94), rgba(36, 36, 36, 0.94));
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 500;
+}
+
+.geo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-height: 24px;
+}
+
+.ok {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--app-ok);
+  color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-9));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carregando {
+  height: 100%;
+  width: 100%;
+  background: var(--app-soft);
+}

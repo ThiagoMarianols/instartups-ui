@@ -1,0 +1,51 @@
+.opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cartao {
+  flex: 1 1 300px;
+  box-sizing: border-box;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  background: var(--app-surface);
+  border: 1px solid var(--app-input-border);
+
+  &[data-checked] {
+    border: 2px solid var(--mantine-primary-color-filled);
+    padding: 23px;
+  }
+}
+
+.icone {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: var(--app-soft);
+  color: var(--mantine-color-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &[data-ativo] {
+    background: var(--mantine-primary-color-filled);
+    color: var(--mantine-primary-color-contrast);
+  }
+}
+
+.campos {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.nota {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--app-soft);
+  border-radius: 8px;
+}
