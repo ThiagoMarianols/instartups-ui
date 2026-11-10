@@ -108,6 +108,7 @@ export function Compositor({ perfil, onPublicado, autoFocus, semMoldura }: Props
           <Textarea
             aria-label="Descrição da postagem"
             placeholder={placeholder}
+            maxLength={LIMITE_DESCRICAO}
             autosize
             minRows={3}
             maxRows={10}

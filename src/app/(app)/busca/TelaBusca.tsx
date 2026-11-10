@@ -10,7 +10,7 @@ import type { FiltroTipo, PerfilBusca } from "@/lib/api/tipos";
 import { rotuloSetor } from "@/lib/api/tipos";
 import { mensagemDoErro } from "@/lib/api/erros";
 import { formatarKm } from "@/lib/formato/moeda";
-import { realcar, termoParaBusca } from "@/lib/validacao/busca";
+import { BUSCA_MAX, realcar, termoParaBusca } from "@/lib/validacao/busca";
 import { chaves, itensDe, useListaPaginada, useSeguir } from "@/hooks/dados";
 import { useSessao } from "@/components/app/Sessao";
 import { Abas } from "@/components/comum/Abas";
@@ -94,6 +94,7 @@ export function TelaBusca() {
           type="search"
           aria-label="Buscar perfis"
           placeholder="Buscar por nome, @usuário ou e-mail"
+          maxLength={BUSCA_MAX}
           size="lg"
           radius={10}
           autoComplete="off"

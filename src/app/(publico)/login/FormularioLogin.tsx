@@ -7,7 +7,7 @@ import { Alert, Button, PasswordInput, Stack, Text, TextInput, Title } from "@ma
 import { IconAlertCircle, IconInfoCircle } from "@tabler/icons-react";
 import { requisitar } from "@/lib/api/cliente";
 import { ErroApi, mensagemDoErro } from "@/lib/api/erros";
-import { validarObrigatorio } from "@/lib/validacao/conta";
+import { LIMITES_CONTA, validarObrigatorio } from "@/lib/validacao/conta";
 import { aplicarErrosServidor, useFormulario } from "@/hooks/useFormulario";
 import classes from "./login.module.css";
 
@@ -103,6 +103,7 @@ export function FormularioLogin() {
         withAsterisk
         placeholder="voce@empresa.com"
         autoComplete="username"
+        maxLength={LIMITES_CONTA.email}
         size="md"
         fz={15}
         {...form.getInputProps("userNameOrEmail")}
@@ -113,6 +114,7 @@ export function FormularioLogin() {
         withAsterisk
         placeholder="Sua senha"
         autoComplete="current-password"
+        maxLength={LIMITES_CONTA.senhaMax}
         size="md"
         visibilityToggleButtonProps={{ "aria-label": "Mostrar senha" }}
         {...form.getInputProps("password")}

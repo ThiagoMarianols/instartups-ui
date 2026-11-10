@@ -103,6 +103,7 @@ function Conteudo({ postagem, onFechar }: { postagem: Postagem; onFechar: () => 
           <Textarea
             label="Descrição"
             withAsterisk
+            maxLength={LIMITE_DESCRICAO}
             autosize
             minRows={4}
             maxRows={12}

@@ -19,7 +19,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { Coordenada, MeuPerfil, UsuarioMe } from "@/lib/api/tipos";
 import { api, requisitar } from "@/lib/api/cliente";
 import { ErroApi, mensagemDoErro } from "@/lib/api/erros";
+import { formatarTelefone, mascararUserName } from "@/lib/formato/texto";
 import {
+  LIMITES_CONTA,
   telefoneParaApi,
   validarEmail,
   validarObrigatorio,
@@ -75,7 +77,11 @@ export function SecaoConta() {
 function FormConta({ usuario }: { usuario: UsuarioMe }) {
   const qc = useQueryClient();
   const { form, enviar } = useFormulario<ValoresConta>({
-    initialValues: { userName: usuario.userName, email: usuario.email, phoneNumber: usuario.phoneNumber ?? "" },
+    initialValues: {
+      userName: usuario.userName,
+      email: usuario.email,
+      phoneNumber: formatarTelefone(usuario.phoneNumber ?? ""),
+    },
     validate: { userName: validarUserName, email: validarEmail, phoneNumber: validarTelefone },
   });
 
@@ -87,7 +93,11 @@ function FormConta({ usuario }: { usuario: UsuarioMe }) {
       });
       qc.setQueryData(chaves.usuario, atualizado);
       qc.invalidateQueries({ queryKey: chaves.meuPerfil });
-      form.resetDirty({ userName: atualizado.userName, email: atualizado.email, phoneNumber: atualizado.phoneNumber ?? "" });
+      form.resetDirty({
+        userName: atualizado.userName,
+        email: atualizado.email,
+        phoneNumber: formatarTelefone(atualizado.phoneNumber ?? ""),
+      });
       notificarSucesso("Dados da conta atualizados.");
     } catch (erro) {
       if (!aplicarErrosServidor(form, erro)) notificarErro(erro);
@@ -101,13 +111,26 @@ function FormConta({ usuario }: { usuario: UsuarioMe }) {
           <TextInput
             label="Nome de usuário"
             autoComplete="username"
+            maxLength={LIMITES_CONTA.userName}
             leftSection={<Text fz={14} c="dimmed">@</Text>}
             inputWrapperOrder={ORDEM}
             description={form.errors.userName ? undefined : "Até 20 caracteres: letras, números e - . _ @ +"}
             miw={220}
             {...form.getInputProps("userName")}
+            onChange={(e) => {
+              const mascarado = mascararUserName(e.currentTarget.value, LIMITES_CONTA.userName);
+              e.currentTarget.value = mascarado;
+              form.setFieldValue("userName", mascarado);
+            }}
           />
-          <TextInput label="E-mail" type="email" autoComplete="email" miw={220} {...form.getInputProps("email")} />
+          <TextInput
+            label="E-mail"
+            type="email"
+            autoComplete="email"
+            maxLength={LIMITES_CONTA.email}
+            miw={220}
+            {...form.getInputProps("email")}
+          />
         </Group>
         <TextInput
           label={
@@ -120,11 +143,18 @@ function FormConta({ usuario }: { usuario: UsuarioMe }) {
           }
           type="tel"
           inputMode="numeric"
+          placeholder="(16) 99999-0000"
+          maxLength={15}
           autoComplete="tel"
           maw={320}
           inputWrapperOrder={ORDEM}
-          description={form.errors.phoneNumber ? undefined : "Somente números."}
+          description={form.errors.phoneNumber ? undefined : "Somente números, com DDD."}
           {...form.getInputProps("phoneNumber")}
+          onChange={(e) => {
+            const mascarado = formatarTelefone(e.currentTarget.value);
+            e.currentTarget.value = mascarado;
+            form.setFieldValue("phoneNumber", mascarado);
+          }}
         />
         <Group justify="flex-end">
           <Button type="submit" loading={form.submitting} disabled={!form.isDirty()}>
@@ -176,6 +206,7 @@ export function SecaoSenha() {
             <PasswordInput
               label="Senha atual"
               autoComplete="current-password"
+              maxLength={LIMITES_CONTA.senhaMax}
               miw={220}
               visibilityToggleButtonProps={{ "aria-label": "Mostrar senha atual" }}
               {...form.getInputProps("currentPassword")}
@@ -184,6 +215,7 @@ export function SecaoSenha() {
               <PasswordInput
                 label="Nova senha"
                 autoComplete="new-password"
+                maxLength={LIMITES_CONTA.senhaMax}
                 visibilityToggleButtonProps={{ "aria-label": "Mostrar nova senha" }}
                 aria-describedby="requisitos-nova-senha"
                 {...form.getInputProps("newPassword")}

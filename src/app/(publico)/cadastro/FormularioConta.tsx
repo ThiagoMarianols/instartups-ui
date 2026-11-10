@@ -5,7 +5,15 @@ import { Alert, Button, PasswordInput, Stack, Text, TextInput, Title } from "@ma
 import { IconAlertCircle } from "@tabler/icons-react";
 import { requisitar } from "@/lib/api/cliente";
 import { mensagemDoErro } from "@/lib/api/erros";
-import { validarEmail, validarSenha, validarTelefone, validarUserName } from "@/lib/validacao/conta";
+import { formatarTelefone, mascararUserName } from "@/lib/formato/texto";
+import {
+  LIMITES_CONTA,
+  telefoneParaApi,
+  validarEmail,
+  validarSenha,
+  validarTelefone,
+  validarUserName,
+} from "@/lib/validacao/conta";
 import { aplicarErrosServidor, useFormulario } from "@/hooks/useFormulario";
 import { RequisitosSenha } from "@/components/cadastro/RequisitosSenha";
 import classes from "@/components/cadastro/cadastro.module.css";
@@ -34,7 +42,12 @@ export function FormularioConta() {
     try {
       const { destino } = await requisitar<{ destino: string }>("/api/sessao/cadastro", {
         metodo: "POST",
-        corpo: { userName: v.userName.trim(), email: v.email.trim(), password: v.password, phoneNumber: v.phoneNumber },
+        corpo: {
+          userName: v.userName.trim(),
+          email: v.email.trim(),
+          password: v.password,
+          phoneNumber: telefoneParaApi(v.phoneNumber),
+        },
       });
       window.location.assign(destino);
     } catch (erro) {
@@ -67,8 +80,14 @@ export function FormularioConta() {
         leftSection={<Text fz={15} c="dimmed">@</Text>}
         leftSectionWidth={30}
         autoComplete="username"
+        maxLength={LIMITES_CONTA.userName}
         inputWrapperOrder={["label", "input", "description", "error"]}
         {...form.getInputProps("userName")}
+        onChange={(e) => {
+          const mascarado = mascararUserName(e.currentTarget.value, LIMITES_CONTA.userName);
+          e.currentTarget.value = mascarado;
+          form.setFieldValue("userName", mascarado);
+        }}
         // A ajuda some quando há erro, como no canvas.
         {...(!form.errors.userName && { description: "Até 20 caracteres: letras, números e - . _ @ +" })}
       />
@@ -78,6 +97,7 @@ export function FormularioConta() {
         withAsterisk
         type="email"
         autoComplete="email"
+        maxLength={LIMITES_CONTA.email}
         {...form.getInputProps("email")}
       />
 
@@ -86,6 +106,7 @@ export function FormularioConta() {
           label="Senha"
           withAsterisk
           autoComplete="new-password"
+          maxLength={LIMITES_CONTA.senhaMax}
           visibilityToggleButtonProps={{ "aria-label": "Mostrar senha" }}
           aria-describedby="requisitos-senha"
           {...form.getInputProps("password")}
@@ -104,11 +125,17 @@ export function FormularioConta() {
         }
         type="tel"
         inputMode="numeric"
-        placeholder="16999990000"
+        placeholder="(16) 99999-0000"
+        maxLength={15}
         autoComplete="tel"
         inputWrapperOrder={["label", "input", "description", "error"]}
         {...form.getInputProps("phoneNumber")}
-        {...(!form.errors.phoneNumber && { description: "Somente números, até 20 dígitos." })}
+        onChange={(e) => {
+          const mascarado = formatarTelefone(e.currentTarget.value);
+          e.currentTarget.value = mascarado;
+          form.setFieldValue("phoneNumber", mascarado);
+        }}
+        {...(!form.errors.phoneNumber && { description: "Somente números, com DDD." })}
       />
 
       <Button type="submit" h={44} size="md" loading={form.submitting}>

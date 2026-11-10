@@ -58,13 +58,17 @@ describe("conta (auth)", () => {
     expect(requisitosSenha("Agro2026x").map((r) => r.ok)).toEqual([true, true, true, true, false]);
   });
 
-  it("telefone: opcional, só dígitos, até 20; vazio vira null", () => {
+  it("telefone: opcional, aceita dígitos ou máscara (99) 99999-9999; envia só dígitos", () => {
     expect(validarTelefone("")).toBeNull();
     expect(validarTelefone("16999990000")).toBeNull();
+    expect(validarTelefone("(16) 99999-0000")).toBeNull();
+    expect(validarTelefone("(16) 3333-4444")).toBeNull();
+    expect(validarTelefone("(16) 9999")).toBe("Formato inválido.");
     expect(validarTelefone("+55 16 99999")).toBe("Formato inválido.");
     expect(validarTelefone("1".repeat(21))).toBe("O valor não pode exceder 20 caracteres.");
     expect(telefoneParaApi("  ")).toBeNull();
     expect(telefoneParaApi(" 123 ")).toBe("123");
+    expect(telefoneParaApi("(16) 99999-0000")).toBe("16999990000");
   });
 });
 

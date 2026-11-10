@@ -1,10 +1,10 @@
 "use client";
 
 import { Divider, Group, Input, NumberInput, Select, Stack, Text, Textarea, TextInput, Title } from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
+import { DateInput } from "@mantine/dates";
 import type { UseFormReturnType } from "@mantine/form";
 import { IconCalendar } from "@tabler/icons-react";
-import { hojeIso } from "@/lib/formato/data";
+import { brParaIso, hojeIso, mascararDataBr } from "@/lib/formato/data";
 import { LIMITES_PERFIL } from "@/lib/validacao/perfil";
 import type { TipoCadastro, ValoresPerfil } from "@/lib/validacao/perfil-form";
 import { useSetores } from "@/hooks/useSetores";
@@ -64,6 +64,8 @@ const dinheiro = {
   decimalScale: 2,
   fixedDecimalScale: true,
   allowNegative: false,
+  max: LIMITES_PERFIL.valorMax,
+  clampBehavior: "strict" as const,
   hideControls: true,
 };
 
@@ -95,6 +97,7 @@ export function PerfilForm({ form, tipo, onEnviandoChange, desabilitado }: Props
           label="Nome"
           withAsterisk
           placeholder={startup ? "Nome da startup" : "Seu nome ou do fundo"}
+          maxLength={LIMITES_PERFIL.nome}
           inputWrapperOrder={ORDEM}
           description={ajuda(form, "perfil.nome", `Até ${LIMITES_PERFIL.nome} caracteres.`)}
           disabled={desabilitado}
@@ -144,20 +147,35 @@ export function PerfilForm({ form, tipo, onEnviandoChange, desabilitado }: Props
               disabled={desabilitado}
               {...form.getInputProps("setor")}
             />
-            <DatePickerInput
+            <DateInput
               label="Data de fundação"
               withAsterisk
               placeholder="dd/mm/aaaa"
               valueFormat="DD/MM/YYYY"
+              dateParser={brParaIso}
               maxDate={hojeIso()}
+              inputMode="numeric"
+              maxLength={10}
               leftSection={<IconCalendar size={16} stroke={1.75} />}
               inputWrapperOrder={ORDEM}
               description={ajuda(form, "dataFundacao", "Datas futuras ficam bloqueadas no calendário.")}
               miw={240}
               clearable={false}
+              allowDeselect
               disabled={desabilitado}
               popoverProps={{ withinPortal: true }}
               {...form.getInputProps("dataFundacao")}
+              onChangeCapture={(e) => {
+                const alvo = e.target as HTMLInputElement;
+                const mascarado = mascararDataBr(alvo.value);
+                alvo.value = mascarado;
+                const iso = brParaIso(mascarado);
+                if (iso && iso > hojeIso()) {
+                  form.setFieldValue("dataFundacao", iso);
+                } else if (!iso && form.values.dataFundacao !== null) {
+                  form.setFieldValue("dataFundacao", null);
+                }
+              }}
             />
           </Group>
           <Group grow align="flex-start" gap={16} wrap="wrap" style={{ rowGap: 16 }}>
@@ -166,8 +184,13 @@ export function PerfilForm({ form, tipo, onEnviandoChange, desabilitado }: Props
               withAsterisk
               placeholder="Nº de pessoas"
               inputMode="numeric"
+              thousandSeparator="."
+              decimalSeparator=","
               allowDecimal={false}
               allowNegative={false}
+              min={LIMITES_PERFIL.equipeMin}
+              max={LIMITES_PERFIL.equipeMax}
+              clampBehavior="strict"
               hideControls
               inputWrapperOrder={ORDEM}
               description={ajuda(form, "tamanhoEquipe", "Entre 1 e 32.767.")}
@@ -191,6 +214,7 @@ export function PerfilForm({ form, tipo, onEnviandoChange, desabilitado }: Props
               label="Pitch"
               withAsterisk
               placeholder="Em poucas linhas: o problema, a solução e por que agora."
+              maxLength={LIMITES_PERFIL.texto}
               autosize
               minRows={5}
               maxRows={12}
@@ -213,6 +237,7 @@ export function PerfilForm({ form, tipo, onEnviandoChange, desabilitado }: Props
               label="Tese de investimento"
               withAsterisk
               placeholder="Em que tipo de startup você investe e o que procura."
+              maxLength={LIMITES_PERFIL.texto}
               autosize
               minRows={6}
               maxRows={12}

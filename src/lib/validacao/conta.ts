@@ -60,16 +60,19 @@ export function validarObrigatorio(valor: string): string | null {
   return valor && valor.trim() ? null : MSG.obrigatorio;
 }
 
+const TELEFONE_MASCARA_REGEX = /^\(\d{2}\) \d{4,5}-\d{4}$/;
+
 export function validarTelefone(valor: string): string | null {
   const v = valor.trim();
   if (!v) return null; // opcional
+  if (TELEFONE_MASCARA_REGEX.test(v)) return null;
   if (v.length > LIMITES_CONTA.telefone) return MSG.maxAuth(LIMITES_CONTA.telefone);
   if (!/^[0-9]+$/.test(v)) return MSG.formato;
   return null;
 }
 
-/** Telefone vazio vai como null (a API guarda "" como está). */
+/** Telefone vazio vai como null (a API guarda "" como está); envia apenas os dígitos. */
 export function telefoneParaApi(valor: string): string | null {
-  const v = valor.trim();
+  const v = valor.replace(/\D/g, "");
   return v ? v : null;
 }

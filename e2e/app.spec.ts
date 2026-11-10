@@ -35,12 +35,17 @@ test.describe("sem sessão", () => {
 
   test("cadastro aplica as regras da API auth", async ({ page }) => {
     await page.goto("/cadastro");
-    await page.locator("input[autocomplete=username]").fill("com espaço");
+    const usuario = page.locator("input[autocomplete=username]");
+    await usuario.fill("com espaço");
+    await expect(usuario).toHaveValue("comespao");
+    await usuario.fill("");
     await page.locator("input[type=email]").fill("sem-arroba");
     await page.locator("input[type=password]").fill("Agro2026x");
-    await page.locator("input[type=tel]").fill("16 9999");
+    const tel = page.locator("input[type=tel]");
+    await tel.fill("16 9999");
+    await expect(tel).toHaveValue("(16) 9999");
     await page.getByRole("button", { name: "Continuar" }).click();
-    await expect(page.getByText("Use apenas letras, números e - . _ @ +")).toBeVisible();
+    await expect(page.getByText("O campo é obrigatório.")).toBeVisible();
     await expect(page.getByText("Formato inválido.")).toHaveCount(2);
     await expect(page.getByText(/caractere especial\.$/)).toBeVisible();
   });

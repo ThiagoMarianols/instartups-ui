@@ -7,7 +7,7 @@ const texto = (v: unknown) => (typeof v === "string" ? v : "");
 
 export async function POST(request: NextRequest) {
   const corpo = (await request.json().catch(() => null)) as Record<string, unknown> | null;
-  const telefone = texto(corpo?.phoneNumber).trim();
+  const telefone = texto(corpo?.phoneNumber).replace(/\D/g, "");
   const usuario = {
     userName: texto(corpo?.userName).trim(),
     email: texto(corpo?.email).trim(),

@@ -143,6 +143,9 @@ export function PainelFiltros({ filtros, onAplicar }: Props) {
                 size="sm"
                 h={34}
                 placeholder="Qualquer"
+                inputMode="numeric"
+                thousandSeparator="."
+                decimalSeparator=","
                 rightSection={<Text fz={13} c="dimmed">km</Text>}
                 rightSectionWidth={40}
                 allowDecimal={false}
