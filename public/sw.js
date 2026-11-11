@@ -4,7 +4,7 @@
 //  - /api, /_next/image e resto -> rede, sem cache (dados nunca ficam guardados)
 // Trocar a versão de CACHE descarta os caches antigos no activate.
 const CACHE = "instartups-v1";
-const PRECACHE = ["/offline.html", "/icons/logo.svg", "/icons/icon-192.png"];
+const PRECACHE = ["/offline.html", "/logo.png", "/icons/icon-192.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)));
