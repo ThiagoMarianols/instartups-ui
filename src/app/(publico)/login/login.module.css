@@ -1,0 +1,109 @@
+.pagina {
+  min-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  background: var(--mantine-color-body);
+}
+
+.marca {
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 420px;
+  box-sizing: border-box;
+  padding: 48px;
+  background: var(--mantine-color-dark-9);
+  color: var(--mantine-color-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    padding: 32px 24px;
+    gap: 32px;
+  }
+}
+
+.imagemFundo {
+  object-fit: cover;
+  filter: blur(8px) brightness(0.65);
+  transform: scale(1.08);
+  pointer-events: none;
+}
+
+.sobreposicao {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.logoTopo {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+}
+
+.chamada {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 480px;
+  margin: auto 0;
+}
+
+.titulo {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: 32px;
+  }
+}
+
+.texto {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.principal {
+  flex: 1 1 480px;
+  box-sizing: border-box;
+  padding: 48px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.divisor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--mantine-color-dimmed);
+  font-size: 13px;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--mantine-color-default-border);
+  }
+}

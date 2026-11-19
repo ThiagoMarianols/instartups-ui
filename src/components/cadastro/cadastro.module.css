@@ -1,0 +1,171 @@
+.pagina {
+  min-height: 100vh;
+  background: var(--app-page);
+}
+
+.cabecalho {
+  box-sizing: border-box;
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  background: var(--app-surface);
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding: 0 16px;
+  }
+}
+
+.principal {
+  box-sizing: border-box;
+  padding: 40px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding: 24px 16px 48px;
+  }
+}
+
+/* Etapas */
+.etapas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.etapa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 0;
+  min-width: 0;
+
+  &[data-ultima] {
+    flex: none;
+  }
+}
+
+.circulo {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid var(--app-soft);
+  background: var(--app-soft);
+  color: var(--mantine-color-dimmed);
+
+  &[data-estado="feita"] {
+    background: var(--mantine-primary-color-filled);
+    border-color: var(--mantine-primary-color-filled);
+    color: var(--mantine-primary-color-contrast);
+  }
+
+  &[data-estado="atual"] {
+    background: var(--app-surface);
+    border-color: var(--mantine-primary-color-filled);
+    color: var(--mantine-color-text);
+  }
+}
+
+.rotulo {
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    display: none;
+  }
+}
+
+.passo {
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+}
+
+.nome {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.linha {
+  flex: 1;
+  min-width: 24px;
+  height: 2px;
+  background: var(--mantine-color-default-border);
+
+  &[data-feita] {
+    background: var(--mantine-primary-color-filled);
+  }
+}
+
+/* Cartão de formulário */
+.cartao {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 32px;
+  background: var(--app-surface);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding: 20px;
+  }
+}
+
+/* Força da senha */
+.barras {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.barra {
+  height: 4px;
+  border-radius: 4px;
+  background: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+
+  &[data-ok] {
+    background: var(--app-ok);
+  }
+}
+
+.requisitos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.requisito {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--app-err);
+
+  &[data-ok] {
+    color: var(--app-ok);
+  }
+}

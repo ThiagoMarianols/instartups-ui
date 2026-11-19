@@ -1,0 +1,68 @@
+# Stack do Docker Swarm (deploy pelo Portainer). Não use name:, pull_policy, container_name,
+# restart nem build: o docker stack deploy recusa ou ignora. Guia do servidor: INSTARTUPS/infra/README.md
+version: "3.8"
+
+services:
+  front:
+    image: ghcr.io/braynerdev/instartups-ui:${IMAGE_TAG:-latest}
+    environment:
+      TZ: America/Sao_Paulo
+      # BFF: as URLs das APIs são lidas só no servidor do Next (o navegador não fala com elas)
+      AUTH_API_URL: ${AUTH_API_URL:?defina AUTH_API_URL no .env}
+      COMMAND_API_URL: ${COMMAND_API_URL:?defina COMMAND_API_URL no .env}
+      QUERY_API_URL: ${QUERY_API_URL:?defina QUERY_API_URL no .env}
+      # Cloudflare R2: sem estas variáveis o upload só fica desabilitado
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID:-}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:-}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:-}
+      R2_BUCKET: ${R2_BUCKET:-}
+      R2_PUBLIC_BASE_URL: ${R2_PUBLIC_BASE_URL:-}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/saude').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - proxy
+    read_only: true
+    tmpfs:
+      - /tmp
+      # Cache do Next (fetch/ISR) precisa ser gravável
+      - /app/.next/cache
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+      update_config:
+        order: start-first
+        failure_action: rollback
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.instartups-front.rule=Host(`${FRONT_DOMAIN:?defina FRONT_DOMAIN no .env}`) || Host(`www.${FRONT_DOMAIN}`)"
+        - "traefik.http.routers.instartups-front.entrypoints=websecure"
+        - "traefik.http.routers.instartups-front.tls.certresolver=letsencrypt"
+        - "traefik.http.routers.instartups-front.middlewares=instartups-front-www"
+        - "traefik.http.routers.instartups-front.service=instartups-front"
+        - "traefik.http.services.instartups-front.loadbalancer.server.port=3000"
+        # www.<domínio> -> <domínio> (redirect permanente; sessão e cookies ficam num host só)
+        - 'traefik.http.middlewares.instartups-front-www.redirectregex.regex=^https://www\.(.*)'
+        - "traefik.http.middlewares.instartups-front-www.redirectregex.replacement=https://$${1}"
+        - "traefik.http.middlewares.instartups-front-www.redirectregex.permanent=true"
+
+# Rede overlay criada uma vez no servidor: docker network create --driver overlay --attachable proxy
+networks:
+  proxy:
+    external: true

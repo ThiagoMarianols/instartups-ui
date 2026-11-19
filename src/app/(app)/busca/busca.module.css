@@ -1,0 +1,48 @@
+.abas {
+  display: flex;
+  border-bottom: 1px solid var(--mantine-color-default-border);
+}
+
+.lista {
+  background: var(--app-surface);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+
+  & + & {
+    border-top: 1px solid var(--mantine-color-default-border);
+  }
+}
+
+.etiqueta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  margin-top: 4px;
+  padding: 0 8px;
+  border-radius: 1000px;
+  background: var(--app-soft);
+  font-size: 12px;
+}
+
+.voce {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: var(--app-soft);
+  color: var(--mantine-color-dimmed);
+  font-size: 13px;
+  font-weight: 600;
+}

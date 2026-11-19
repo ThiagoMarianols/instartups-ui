@@ -1,0 +1,106 @@
+.navbar {
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: var(--app-surface);
+}
+
+.marca {
+  display: flex;
+  padding: 0 10px;
+  color: var(--mantine-color-text);
+  text-decoration: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--mantine-color-text);
+
+  &:hover {
+    background: var(--app-soft);
+  }
+
+  &[data-ativo] {
+    background: var(--app-soft);
+    font-weight: 700;
+  }
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 8px 0;
+  border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.usuarioTexto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cabecalhoMobile {
+  height: 100%;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--app-surface);
+}
+
+.carregando {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Colunas das telas internas */
+.pagina {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.principal {
+  flex: 1 1 560px;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 24px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding: 16px 16px 48px;
+  }
+}
+
+.lateral {
+  flex: 0 1 340px;
+  box-sizing: border-box;
+  padding: 24px 24px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+
+  @media (max-width: $mantine-breakpoint-lg) {
+    display: none;
+  }
+}

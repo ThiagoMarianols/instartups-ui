@@ -1,0 +1,90 @@
+.cartao {
+  background: var(--app-surface);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.capa {
+  aspect-ratio: 4 / 1;
+  background: var(--app-media);
+  color: var(--app-media-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.corpo {
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding: 0 16px 16px;
+  }
+}
+
+.topo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  margin-top: -48px;
+  border: 4px solid var(--app-surface);
+  box-sizing: content-box;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    margin-top: -36px;
+  }
+}
+
+.sobre {
+  background: var(--app-surface);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stats {
+  display: grid;
+  gap: 12px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.stat {
+  padding: 12px 14px;
+  background: var(--app-soft);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alertaDesativado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--app-err-bg);
+  border-radius: 8px;
+}

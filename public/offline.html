@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8f9fa" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1f1f1f" media="(prefers-color-scheme: dark)" />
+  <title>Sem conexão · InStartups</title>
+  <!-- Página autocontida (servida pelo service worker sem rede): nada de CSS/JS externo. -->
+  <style>
+    :root {
+      color-scheme: light dark;
+      --page: #f8f9fa;
+      --surface: #ffffff;
+      --text: #212529;
+      --dimmed: #495057;
+      --border: #dee2e6;
+      --primary: #141414;
+      --primary-text: #ffffff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --page: #1f1f1f;
+        --surface: #242424;
+        --text: #f1f3f5;
+        --dimmed: #b8b8b8;
+        --border: #424242;
+        --primary: #c9c9c9;
+        --primary-text: #141414;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: var(--page);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    main {
+      width: 100%;
+      max-width: 380px;
+      padding: 32px 24px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      text-align: center;
+    }
+
+    svg {
+      width: 64px;
+      height: 64px;
+    }
+
+    h1 {
+      margin: 20px 0 8px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0 0 24px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--dimmed);
+    }
+
+    button {
+      height: 42px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--primary);
+      color: var(--primary-text);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <img src="/logo.png" width="64" height="64" alt="InStartups" style="object-fit: contain; display: inline-block;" />
+    <h1>Você está sem conexão</h1>
+    <p>Verifique sua internet. Assim que a conexão voltar, o InStartups carrega normalmente.</p>
+    <button type="button" onclick="location.reload()">Tentar novamente</button>
+  </main>
+</body>
+
+</html>
