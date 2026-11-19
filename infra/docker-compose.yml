@@ -4,7 +4,7 @@ version: "3.8"
 
 services:
   front:
-    image: ghcr.io/ThiagoMarianols/instartups-ui:${IMAGE_TAG:-latest}
+    image: ghcr.io/thiagomarianols/instartups-ui:${IMAGE_TAG:-latest}
     environment:
       TZ: America/Sao_Paulo
       # BFF: as URLs das APIs são lidas só no servidor do Next (o navegador não fala com elas)
