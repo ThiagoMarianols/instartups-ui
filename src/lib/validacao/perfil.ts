@@ -1,5 +1,5 @@
 // Regras da API command para perfis (startup e investidor).
-import type { CodigoSetor, Coordenada } from "@/lib/api/tipos";
+import { SETORES_PADRAO, type CodigoSetor, type Coordenada } from "@/lib/api/tipos";
 import { formatarMoeda } from "@/lib/formato/moeda";
 import { hojeIso } from "@/lib/formato/data";
 import { MSG } from "./mensagens";
@@ -13,7 +13,7 @@ export const LIMITES_PERFIL = {
   valorMax: 9_999_999_999.99,
 } as const;
 
-export const SETORES_VALIDOS: CodigoSetor[] = ["FINANCAS", "SAUDE", "AGRONEGOCIOS", "VAREJO"];
+export const SETORES_VALIDOS: CodigoSetor[] = SETORES_PADRAO.map((s) => s.codigo);
 
 /** Nome: obrigatório após trim; limite contado antes do trim (como na API). */
 export function validarNome(valor: string): string | null {
