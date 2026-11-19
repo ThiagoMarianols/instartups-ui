@@ -4,7 +4,7 @@ version: "3.8"
 
 services:
   front:
-    image: ghcr.io/braynerdev/instartups-ui:${IMAGE_TAG:-latest}
+    image: ghcr.io/ThiagoMarianols/instartups-ui:${IMAGE_TAG:-latest}
     environment:
       TZ: America/Sao_Paulo
       # BFF: as URLs das APIs são lidas só no servidor do Next (o navegador não fala com elas)
@@ -18,7 +18,7 @@ services:
       R2_BUCKET: ${R2_BUCKET:-}
       R2_PUBLIC_BASE_URL: ${R2_PUBLIC_BASE_URL:-}
     healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/saude').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      test: [ "CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/saude').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))" ]
       interval: 30s
       timeout: 5s
       retries: 3

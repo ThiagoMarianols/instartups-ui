@@ -75,7 +75,7 @@ Mesmo padrão das APIs. Guia do servidor (Traefik, DNS, certificados): `INSTARTU
 | `infra/Dockerfile` | Imagem `node:22-alpine` com o `output: "standalone"` do Next, usuário não-root, porta 3000 |
 | `infra/docker-compose.yml` | Stack do Swarm: Traefik em `FRONT_DOMAIN` e `www.FRONT_DOMAIN` (o `www` redireciona para o raiz), healthcheck em `/api/saude` |
 | `infra/.env.example` | Variáveis da stack (cadastre no Portainer) |
-| `.github/workflows/ci-cd.yml` | Lint, tipos e testes; depois build e push para `ghcr.io/braynerdev/instartups-ui` |
+| `.github/workflows/ci-cd.yml` | Lint, tipos e testes; depois build e push para `ghcr.io/ThiagoMarianols/instartups-ui` |
 
 Branches: `develop`, `homolog` e `main`. Cada push publica a imagem com a tag da branch (`main` também vira `latest`); tags `vX.Y.Z` publicam `X.Y.Z` e `X.Y`. Pull requests só buildam.
 
