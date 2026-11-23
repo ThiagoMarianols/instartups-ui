@@ -1,33 +1,7 @@
 // Contratos das APIs (auth, command, query). Campos em camelCase, como chegam no JSON.
 
 export type TipoPerfil = "STARTUP" | "INVESTIDOR";
-export type CodigoSetor =
-  | "AGRONEGOCIOS"
-  | "FINANCAS"
-  | "SAUDE"
-  | "VAREJO"
-  // Tecnologia (10)
-  | "INTELIGENCIA_ARTIFICIAL"
-  | "CIBERSEGURANCA"
-  | "CLOUD_COMPUTING"
-  | "BLOCKCHAIN"
-  | "INTERNET_DAS_COISAS"
-  | "BIOTECNOLOGIA"
-  | "BIG_DATA"
-  | "DESENVOLVIMENTO_SOFTWARE"
-  | "REALIDADE_VIRTUAL"
-  | "ROBOTICA"
-  // Outros setores (10)
-  | "EDUCACAO"
-  | "ENERGIA"
-  | "LOGISTICA"
-  | "IMOBILIARIO"
-  | "ALIMENTOS"
-  | "MEIO_AMBIENTE"
-  | "JURIDICO"
-  | "RECURSOS_HUMANOS"
-  | "MARKETING"
-  | "TURISMO";
+export type CodigoSetor = "FINANCAS" | "SAUDE" | "AGRONEGOCIOS" | "VAREJO";
 export type TipoMidia = "FOTO" | "VIDEO";
 export type FiltroTipo = "todos" | "startup" | "investidor";
 
@@ -187,33 +161,10 @@ export interface EditarPostagemDTO {
 }
 
 export const SETORES_PADRAO: Setor[] = [
-  // Setores originais
   { codigo: "AGRONEGOCIOS", rotulo: "Agronegócios" },
   { codigo: "FINANCAS", rotulo: "Finanças" },
   { codigo: "SAUDE", rotulo: "Saúde" },
   { codigo: "VAREJO", rotulo: "Varejo" },
-  // Tecnologia (10)
-  { codigo: "INTELIGENCIA_ARTIFICIAL", rotulo: "Inteligência Artificial" },
-  { codigo: "CIBERSEGURANCA", rotulo: "Cibersegurança" },
-  { codigo: "CLOUD_COMPUTING", rotulo: "Computação em Nuvem (Cloud)" },
-  { codigo: "BLOCKCHAIN", rotulo: "Blockchain e Criptoeconomia" },
-  { codigo: "INTERNET_DAS_COISAS", rotulo: "Internet das Coisas (IoT)" },
-  { codigo: "BIOTECNOLOGIA", rotulo: "Biotecnologia" },
-  { codigo: "BIG_DATA", rotulo: "Big Data e Analytics" },
-  { codigo: "DESENVOLVIMENTO_SOFTWARE", rotulo: "Software e SaaS" },
-  { codigo: "REALIDADE_VIRTUAL", rotulo: "Realidade Virtual e Aumentada (VR/AR)" },
-  { codigo: "ROBOTICA", rotulo: "Robótica e Automação" },
-  // Outros setores (10)
-  { codigo: "EDUCACAO", rotulo: "Educação" },
-  { codigo: "ENERGIA", rotulo: "Energia e Sustentabilidade" },
-  { codigo: "LOGISTICA", rotulo: "Logística e Transporte" },
-  { codigo: "IMOBILIARIO", rotulo: "Imobiliário" },
-  { codigo: "ALIMENTOS", rotulo: "Alimentos e Bebidas" },
-  { codigo: "MEIO_AMBIENTE", rotulo: "Meio Ambiente e Clima" },
-  { codigo: "JURIDICO", rotulo: "Jurídico" },
-  { codigo: "RECURSOS_HUMANOS", rotulo: "Recursos Humanos" },
-  { codigo: "MARKETING", rotulo: "Marketing e Vendas" },
-  { codigo: "TURISMO", rotulo: "Turismo e Hotelaria" },
 ];
 
 export function rotuloSetor(codigo: CodigoSetor | null | undefined): string {
