@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, MouseEvent } from "react";
 import { ActionIcon } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight, IconMaximize } from "@tabler/icons-react";
 import type { Midia } from "@/lib/api/tipos";
@@ -16,15 +16,27 @@ interface Props {
   /** Modo tela cheia (visualizador): mídia inteira, fundo escuro. */
   ampliado?: boolean;
   onAbrir?: (indice: number) => void;
+  /** Ao dar duplo clique/toque em uma foto no feed, alterna curtida em vez de ampliar. */
+  onDuploCliqueFoto?: () => void;
 }
 
 /** Carrossel de mídias da postagem: um slide por vez, deslize por toque (scroll-snap), setas e indicadores. */
-export function CarrosselMidias({ midias, autor, inicial = 0, ampliado = false, onAbrir }: Props) {
+export function CarrosselMidias({ midias, autor, inicial = 0, ampliado = false, onAbrir, onDuploCliqueFoto }: Props) {
   const trilho = useRef<HTMLDivElement>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
+  const timerClique = useRef<number | null>(null);
   const [atual, setAtual] = useState(inicial);
   const [natural, setNatural] = useState<number | null>(null);
   const n = midias.length;
+
+  const limparTimerClique = () => {
+    if (timerClique.current !== null) {
+      window.clearTimeout(timerClique.current);
+      timerClique.current = null;
+    }
+  };
+
+  useEffect(() => () => limparTimerClique(), []);
 
   useLayoutEffect(() => {
     const el = trilho.current;
@@ -44,10 +56,29 @@ export function CarrosselMidias({ midias, autor, inicial = 0, ampliado = false, 
   const varios = n > 1;
 
   const aoRolar = () => {
+    limparTimerClique();
     const el = trilho.current;
     if (!el || el.clientWidth === 0) return;
     const i = Math.round(el.scrollLeft / el.clientWidth);
     setAtual(Math.min(Math.max(i, 0), n - 1));
+  };
+
+  const tratarCliqueFoto = (e: MouseEvent<HTMLButtonElement>, i: number) => {
+    if (!onAbrir) return;
+    if (!onDuploCliqueFoto || e.detail === 0) {
+      limparTimerClique();
+      onAbrir(i);
+      return;
+    }
+    if (timerClique.current !== null) {
+      limparTimerClique();
+      onDuploCliqueFoto();
+      return;
+    }
+    timerClique.current = window.setTimeout(() => {
+      timerClique.current = null;
+      onAbrir(i);
+    }, 260);
   };
 
   const ir = (i: number) => {
@@ -143,7 +174,12 @@ export function CarrosselMidias({ midias, autor, inicial = 0, ampliado = false, 
                   )}
                 </>
               ) : !ampliado && onAbrir ? (
-                <button type="button" className={classes.abrirSlide} aria-label={`Ampliar foto ${i + 1}`} onClick={() => onAbrir(i)}>
+                <button
+                  type="button"
+                  className={classes.abrirSlide}
+                  aria-label={`Ampliar foto ${i + 1}`}
+                  onClick={(e) => tratarCliqueFoto(e, i)}
+                >
                   {foto}
                 </button>
               ) : (

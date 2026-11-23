@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   box-sizing: border-box;
   width: 100%;
   padding: 16px;
@@ -90,6 +91,77 @@
   border: 0;
   background: none;
   cursor: zoom-in;
+  touch-action: manipulation;
+}
+
+.midiaWrapper {
+  position: relative;
+}
+
+.feedbackCurtida {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  pointer-events: none;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  animation: pulsoCurtida 720ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  &[data-acao="curtir"] {
+    color: var(--app-heart);
+    filter: drop-shadow(0 6px 18px rgb(0 0 0 / 0.35));
+  }
+
+  &[data-acao="descurtir"] {
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.55);
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: pulsoCurtidaReduzido 550ms ease forwards;
+  }
+}
+
+@keyframes pulsoCurtida {
+  0% {
+    opacity: 0;
+    transform: scale(0.45);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.16);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(0.98);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes pulsoCurtidaReduzido {
+  0% {
+    opacity: 0;
+  }
+  20%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .ampliar {
@@ -203,6 +275,16 @@
     color: var(--app-heart);
   }
 
+  &[data-curtiu] svg {
+    animation: curtirBotao 260ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &[data-curtiu] svg {
+      animation: none;
+    }
+  }
+
   &:hover:not(:disabled) {
     background: var(--app-soft);
   }
@@ -212,8 +294,31 @@
     opacity: 0.45;
   }
 
+  &:focus-visible {
+    outline: 2px solid var(--mantine-primary-color-filled);
+    outline-offset: 2px;
+  }
+
   & .contagem {
     color: var(--mantine-color-text);
+  }
+}
+
+.rotuloCurtidas {
+  color: var(--mantine-color-dimmed);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+@keyframes curtirBotao {
+  0% {
+    transform: scale(0.85);
+  }
+  55% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 

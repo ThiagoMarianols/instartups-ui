@@ -66,7 +66,7 @@ export function ShellApp({ children }: { children: ReactNode }) {
           </div>
         </AppShell.Header>
         <AppShell.Navbar>
-          <AppShell.Section grow component="div">
+          <AppShell.Section grow component="div" style={{ display: "flex", flexDirection: "column" }}>
             <Navbar onNavegar={menu.close} />
           </AppShell.Section>
         </AppShell.Navbar>
