@@ -73,7 +73,16 @@ export function Navbar({ onNavegar }: { onNavegar?: () => void }) {
       </Stack>
 
       {perfil.ativo ? (
-        <Button h={44} size="md" fz={15} leftSection={<IconPlus size={18} stroke={2} />} onClick={abrirNovaPostagem}>
+        <Button
+          h={44}
+          size="md"
+          fz={15}
+          leftSection={<IconPlus size={18} stroke={2} />}
+          onClick={() => {
+            onNavegar?.();
+            abrirNovaPostagem();
+          }}
+        >
           Nova postagem
         </Button>
       ) : (
@@ -85,15 +94,17 @@ export function Navbar({ onNavegar }: { onNavegar?: () => void }) {
       )}
 
       <div className={classes.usuario}>
-        <AvatarPerfil nome={perfil.nome} tipo={perfil.tipo} src={perfil.imagemPerfilUrl} tamanho={38} />
-        <div className={classes.usuarioTexto}>
-          <Text fz={14} fw={600} truncate>
-            {perfil.nome}
-          </Text>
-          <Text fz={12} c="dimmed" truncate>
-            @{usuario?.userName ?? perfil.usuario ?? ""}
-          </Text>
-        </div>
+        <Link href="/perfil/me" className={classes.usuarioLink} onClick={onNavegar}>
+          <AvatarPerfil nome={perfil.nome} tipo={perfil.tipo} src={perfil.imagemPerfilUrl} tamanho={38} />
+          <div className={classes.usuarioTexto}>
+            <Text fz={14} fw={600} truncate>
+              {perfil.nome}
+            </Text>
+            <Text fz={12} c="dimmed" truncate>
+              @{usuario?.userName ?? perfil.usuario ?? ""}
+            </Text>
+          </div>
+        </Link>
         <Menu position="top-end" width={220} shadow="md">
           <Menu.Target>
             <ActionIcon variant="subtle" color="gray" size={36} aria-label="Menu da conta">

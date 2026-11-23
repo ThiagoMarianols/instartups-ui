@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, type MouseEvent, type PointerEvent } from "react";
 import Link from "next/link";
 import { ActionIcon, Anchor, Button, Group, Menu, Stack, Text, Tooltip } from "@mantine/core";
-import { IconBan, IconDots, IconHeart, IconHeartFilled, IconPencil } from "@tabler/icons-react";
+import { IconBan, IconDots, IconHeart, IconHeartBroken, IconHeartFilled, IconPencil } from "@tabler/icons-react";
 import type { Postagem } from "@/lib/api/tipos";
 import { rotuloSetor } from "@/lib/api/tipos";
 import { formatarKm, formatarNumero } from "@/lib/formato/moeda";
@@ -24,6 +24,12 @@ interface Props {
   onEditar?: (p: Postagem) => void;
 }
 
+const INTERATIVO = "a, button, video, input, textarea, [role='menu'], [role='menuitem']";
+
+function ehInterativo(alvo: EventTarget | null): boolean {
+  return alvo instanceof Element && Boolean(alvo.closest(INTERATIVO));
+}
+
 function meta(p: Postagem): string {
   const partes: string[] = [];
   if (p.autor.setor) partes.push(rotuloSetor(p.autor.setor));
@@ -39,11 +45,76 @@ export function PostCard({ postagem: p, meuPerfilAtivo, onEditar }: Props) {
   const curtir = useCurtir();
   const status = useStatusPostagem();
   const [ampliada, setAmpliada] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState<{ chave: number; acao: "curtir" | "descurtir"; alvo: "card" | "midia" } | null>(null);
+  const contadorFeedback = useRef(0);
+  const inicioToque = useRef<{ x: number; y: number } | null>(null);
+  const ultimoToque = useRef<{ tempo: number; x: number; y: number } | null>(null);
+  const ultimoDuploToque = useRef(0);
+
   const href = p.autor.ehMeu ? "/perfil/me" : `/perfil/${p.autor.id}`;
   const propria = p.autor.ehMeu;
   const desativada = !p.ativo;
   const curtiu = p.curtidaPorMim && !propria;
   const podeCurtir = !propria && !desativada && meuPerfilAtivo;
+
+  const alternarPorDuploClique = (alvo: "card" | "midia") => {
+    if (!podeCurtir || curtir.isPending) return;
+    const proximo = !curtiu;
+    contadorFeedback.current += 1;
+    setFeedback({ chave: contadorFeedback.current, acao: proximo ? "curtir" : "descurtir", alvo });
+    curtir.mutate({ id: p.id, curtir: proximo });
+  };
+
+  const aoPressionarPonteiro = (e: PointerEvent<HTMLElement>) => {
+    if (e.pointerType !== "touch" || ehInterativo(e.target)) {
+      inicioToque.current = null;
+      return;
+    }
+    inicioToque.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const aoSoltarPonteiro = (e: PointerEvent<HTMLElement>) => {
+    const inicio = inicioToque.current;
+    inicioToque.current = null;
+    if (e.pointerType !== "touch" || !inicio || ehInterativo(e.target)) return;
+    if (Math.hypot(e.clientX - inicio.x, e.clientY - inicio.y) >= 12) return;
+
+    const agora = Date.now();
+    const anterior = ultimoToque.current;
+    if (anterior && agora - anterior.tempo < 300 && Math.hypot(e.clientX - anterior.x, e.clientY - anterior.y) < 40) {
+      ultimoToque.current = null;
+      ultimoDuploToque.current = agora;
+      alternarPorDuploClique("card");
+      return;
+    }
+    ultimoToque.current = { tempo: agora, x: e.clientX, y: e.clientY };
+  };
+
+  const aoCancelarPonteiro = () => {
+    inicioToque.current = null;
+  };
+
+  const aoDuploClique = (e: MouseEvent<HTMLElement>) => {
+    if (!podeCurtir || curtir.isPending || ehInterativo(e.target)) return;
+    if (Date.now() - ultimoDuploToque.current < 400) return;
+    window.getSelection()?.removeAllRanges();
+    alternarPorDuploClique("card");
+  };
+
+  const renderFeedback = (alvo: "card" | "midia") => {
+    if (feedback?.alvo !== alvo) return null;
+    return (
+      <span
+        key={feedback.chave}
+        className={classes.feedbackCurtida}
+        data-acao={feedback.acao}
+        aria-hidden="true"
+        onAnimationEnd={() => setFeedback((atual) => (atual?.chave === feedback.chave ? null : atual))}
+      >
+        {feedback.acao === "curtir" ? <IconHeartFilled size={76} /> : <IconHeartBroken size={46} stroke={1.75} />}
+      </span>
+    );
+  };
 
   const desativar = () =>
     confirmar({
@@ -53,6 +124,8 @@ export function PostCard({ postagem: p, meuPerfilAtivo, onEditar }: Props) {
       onConfirmar: () =>
         status.mutate({ id: p.id, ativar: false }, { onSuccess: () => notificarSucesso("Postagem desativada.") }),
     });
+
+  const rotuloCurtidas = p.totalCurtidas === 1 ? "curtida" : "curtidas";
 
   const botaoCurtir = (
     <button
@@ -65,12 +138,24 @@ export function PostCard({ postagem: p, meuPerfilAtivo, onEditar }: Props) {
       onClick={() => curtir.mutate({ id: p.id, curtir: !curtiu })}
     >
       {curtiu ? <IconHeartFilled size={20} /> : <IconHeart size={20} stroke={1.75} />}
-      <span className={classes.contagem}>{formatarNumero(p.totalCurtidas)}</span>
+      <span className={classes.contagem}>
+        {formatarNumero(p.totalCurtidas)}{" "}
+        <span className={classes.rotuloCurtidas}>{rotuloCurtidas}</span>
+      </span>
     </button>
   );
 
   return (
-    <article className={classes.card} data-desativada={desativada || undefined} aria-label={`Postagem de ${p.autor.nome}`}>
+    <article
+      className={classes.card}
+      data-desativada={desativada || undefined}
+      aria-label={`Postagem de ${p.autor.nome}`}
+      onPointerDown={aoPressionarPonteiro}
+      onPointerUp={aoSoltarPonteiro}
+      onPointerCancel={aoCancelarPonteiro}
+      onDoubleClick={aoDuploClique}
+    >
+      {renderFeedback("card")}
       <Group gap={12} wrap="nowrap" align="center">
         <Anchor component={Link} href={href} aria-label={`Abrir perfil de ${p.autor.nome}`} style={{ flex: "none" }}>
           <AvatarPerfil nome={p.autor.nome} tipo={p.autor.tipo} src={p.autor.imagemPerfilUrl} tamanho={42} />
@@ -124,10 +209,20 @@ export function PostCard({ postagem: p, meuPerfilAtivo, onEditar }: Props) {
         {p.descricao}
       </p>
 
-      <CarrosselMidias midias={p.midias} autor={p.autor.nome} onAbrir={setAmpliada} />
+      {p.midias.length > 0 && (
+        <div className={classes.midiaWrapper}>
+          <CarrosselMidias
+            midias={p.midias}
+            autor={p.autor.nome}
+            onAbrir={setAmpliada}
+            onDuploCliqueFoto={podeCurtir ? () => alternarPorDuploClique("midia") : undefined}
+          />
+          {renderFeedback("midia")}
+        </div>
+      )}
       <VisualizadorMidias midias={p.midias} autor={p.autor.nome} indice={ampliada} onFechar={() => setAmpliada(null)} />
 
-      <Group gap={4} wrap="nowrap">
+      <div>
         {propria ? (
           <Tooltip label="Um perfil não pode curtir a própria postagem." position="top-start">
             <span>{botaoCurtir}</span>
@@ -135,10 +230,7 @@ export function PostCard({ postagem: p, meuPerfilAtivo, onEditar }: Props) {
         ) : (
           botaoCurtir
         )}
-        <Text fz={13} c="dimmed">
-          curtidas
-        </Text>
-      </Group>
+      </div>
     </article>
   );
 }

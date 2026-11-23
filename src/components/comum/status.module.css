@@ -1,0 +1,53 @@
+.pagina {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px 16px;
+  background: var(--app-page);
+}
+
+.marca {
+  color: var(--mantine-color-text);
+  text-decoration: none;
+}
+
+.cartao {
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 36px 28px;
+  border-radius: 12px;
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--app-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding: 28px 20px;
+  }
+}
+
+.icone {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--app-soft);
+  color: var(--mantine-color-dimmed);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.codigo {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--mantine-color-dimmed);
+}

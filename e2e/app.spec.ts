@@ -76,13 +76,15 @@ test.describe("com sessão", () => {
   test("curtir e descurtir (contador otimista)", async ({ page }) => {
     const card = page.locator("article").filter({ has: page.getByRole("button", { name: /^(Curtir|Descurtir)$/ }) }).first();
     const botao = card.getByRole("button", { name: /^(Curtir|Descurtir)$/ });
-    const antes = Number(await botao.innerText());
+    const textoCurtidas = (n: number) => `${n.toLocaleString("pt-BR")} ${n === 1 ? "curtida" : "curtidas"}`;
+    const antes = Number.parseInt((await botao.innerText()).replace(/\D/g, ""), 10);
     const curtia = (await botao.getAttribute("aria-pressed")) === "true";
+    const depois = antes + (curtia ? -1 : 1);
     await botao.click();
-    await expect(botao).toHaveText(String(antes + (curtia ? -1 : 1)));
+    await expect(botao).toHaveText(textoCurtidas(depois));
     await expect(botao).toBeEnabled();
     await botao.click(); // desfaz
-    await expect(botao).toHaveText(String(antes));
+    await expect(botao).toHaveText(textoCurtidas(antes));
   });
 
   test("busca remove o @ e segue/deixa de seguir pelo resultado", async ({ page }) => {
